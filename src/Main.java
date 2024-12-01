@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class Main {
     private static int d;
@@ -16,36 +15,38 @@ public class Main {
 
     private static List<Animal> readAnimals() {
         List<Animal> animals = new ArrayList<>();
-        String filePath = "input.txt"; // Specify the path to the file
+        String filePath = "input.txt";
         try (Scanner scanner = new Scanner(new File(filePath))) {
             d = scanner.nextInt();
             g = str_to_float(scanner.next());
             int n = scanner.nextInt();
+            if (g < 0 || g > 100) {throw new GrassOutOfBoundsException();}
+            if (d < 1 || d > 20) {throw new InvalidInputException();}
             scanner.nextLine();
             for (int i = 0; i < n; i++) {
                 String line = scanner.nextLine();
+                if (line.split(" ").length != 4) { throw new InvalidNumberOfAnimalParametersException();}
                 try (Scanner sc = new Scanner(line)) {
                     String animal = sc.next();
-                    if (Pattern.compile("(Lion|Boar|Zebra)").matcher(animal).matches()) {
+                    if (animal.equals("Lion") || animal.equals("Boar") || animal.equals("Zebra")) {
                         float weight = str_to_float(sc.next());
                         float speed = str_to_float(sc.next());
                         float energy = str_to_float(sc.next());
-                        if (!sc.hasNext()) {
-                            switch (animal) {
-                                case "Lion" -> animals.add(new Lion(weight, speed, energy, AnimalSound.LION));
-                                case "Boar" -> animals.add(new Boar(weight, speed, energy, AnimalSound.BOAR));
-                                case "Zebra" -> animals.add(new Zebra(weight, speed, energy, AnimalSound.ZEBRA));
-                                default -> System.out.println("Animal Not Found");
-                            }
-                        } else {throw new InvalidNumberOfAnimalParametersException();}
+                        switch (animal) {
+                            case "Lion" -> animals.add(new Lion(weight, speed, energy, AnimalSound.LION));
+                            case "Boar" -> animals.add(new Boar(weight, speed, energy, AnimalSound.BOAR));
+                            case "Zebra" -> animals.add(new Zebra(weight, speed, energy, AnimalSound.ZEBRA));
+                            default -> System.out.println("Animal Not Found");
+                        }
                     } else {
-                        throw new IllegalArgumentException();
+                        throw new InvalidInputException();
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                     return null;
                 }
             }
+            if (scanner.hasNextLine()) {throw new InvalidInputException();}
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
