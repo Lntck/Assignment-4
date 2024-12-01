@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 public class Main {
     private static int d;
     private static float g;
-    private static int n;
-
     public static void main(String[] args) {
         List<Animal> animals = readAnimals();
         if (animals != null) {runSimulation(d, g, animals);}
@@ -22,28 +20,29 @@ public class Main {
         try (Scanner scanner = new Scanner(new File(filePath))) {
             d = scanner.nextInt();
             g = str_to_float(scanner.next());
-            n = scanner.nextInt();
+            int n = scanner.nextInt();
             scanner.nextLine();
             for (int i = 0; i < n; i++) {
                 String line = scanner.nextLine();
-                Scanner sc = new Scanner(line);
-                String animal = sc.next();
-                if (Pattern.compile("(Lion|Boar|Zebra)").matcher(animal).matches()) {
-                    float weight = str_to_float(sc.next());
-                    float speed = str_to_float(sc.next());
-                    float energy = str_to_float(sc.next());
-                    if (sc.hasNext()) {
-                        System.out.println("Invalid number of animal parameters");
-                        return null;
+                try (Scanner sc = new Scanner(line)) {
+                    String animal = sc.next();
+                    if (Pattern.compile("(Lion|Boar|Zebra)").matcher(animal).matches()) {
+                        float weight = str_to_float(sc.next());
+                        float speed = str_to_float(sc.next());
+                        float energy = str_to_float(sc.next());
+                        if (!sc.hasNext()) {
+                            switch (animal) {
+                                case "Lion" -> animals.add(new Lion(weight, speed, energy, AnimalSound.LION));
+                                case "Boar" -> animals.add(new Boar(weight, speed, energy, AnimalSound.BOAR));
+                                case "Zebra" -> animals.add(new Zebra(weight, speed, energy, AnimalSound.ZEBRA));
+                                default -> System.out.println("Animal Not Found");
+                            }
+                        } else {throw new InvalidNumberOfAnimalParametersException();}
+                    } else {
+                        throw new IllegalArgumentException();
                     }
-                    switch (animal) {
-                        case "Lion" -> animals.add(new Lion(weight, speed, energy, AnimalSound.LION));
-                        case "Boar" -> animals.add(new Boar(weight, speed, energy, AnimalSound.BOAR));
-                        case "Zebra" -> animals.add(new Zebra(weight, speed, energy, AnimalSound.ZEBRA));
-                        default -> System.out.println("Animal Not Found");
-                    }
-                } else {
-                    System.out.println("Invalid inputs");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                     return null;
                 }
             }
