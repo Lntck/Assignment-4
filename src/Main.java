@@ -21,7 +21,7 @@ public class Main {
             g = str_to_float(scanner.next());
             int n = scanner.nextInt();
             if (g < 0 || g > 100) {throw new GrassOutOfBoundsException();}
-            if (d < 1 || d > 20) {throw new InvalidInputException();}
+            if (d < 1 || d > 30) {throw new InvalidInputException();}
             scanner.nextLine();
             for (int i = 0; i < n; i++) {
                 String line = scanner.nextLine();
