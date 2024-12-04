@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    private static int d;
-    private static float g;
+    private static int days;
+    private static float grassAmount;
     public static void main(String[] args) {
         List<Animal> animals = readAnimals();
         removeDeadAnimals(animals);
-        runSimulation(d, g, animals);
+        runSimulation(days, grassAmount, animals);
         animals.forEach(Animal::makeSound);
     }
 
@@ -19,15 +19,24 @@ public class Main {
         List<Animal> animals = new ArrayList<>();
         String filePath = "input.txt";
         try (Scanner scanner = new Scanner(new File(filePath))) {
-            d = scanner.nextInt();
-            g = str_to_float(scanner.next());
-            int n = scanner.nextInt();
-            if (n < 1 || n > 20) {throw new InvalidInputException();}
-            if (g < 0 || g > 100) {throw new GrassOutOfBoundsException();}
-            if (d < 1 || d > 30) {throw new InvalidInputException();}
+            String d = scanner.nextLine();
+            grassAmount = str_to_float(scanner.next());
+            if (grassAmount < 0 || grassAmount > 100) {throw new GrassOutOfBoundsException();}
+            days = str_to_int(d);
+            int n = str_to_int(scanner.next());
+            if ((days < 1 || days > 30) || (n < 1 || n > 20)) {throw new InvalidInputException();}
+
             scanner.nextLine();
+            List<String> lines = new ArrayList<>();
+            while (scanner.hasNextLine()) {
+                lines.add(scanner.nextLine());
+            }
+            if (lines.size() != n) {
+                throw new InvalidInputException();
+            }
+
             for (int i = 0; i < n; i++) {
-                String line = scanner.nextLine();
+                String line = lines.get(i);
                 if (line.split(" ").length != 4) { throw new InvalidNumberOfAnimalParametersException();}
                 try (Scanner sc = new Scanner(line)) {
                     String animal = sc.next();
@@ -63,6 +72,14 @@ public class Main {
         }
         if (str.matches(pattern)) {
             return Float.parseFloat(str);
+        }
+        throw new InvalidInputException();
+    }
+
+    private static Integer str_to_int(String str) throws InvalidInputException {
+        String pattern = "\\d+$";
+        if (str.matches(pattern)) {
+            return Integer.parseInt(str);
         }
         throw new InvalidInputException();
     }
