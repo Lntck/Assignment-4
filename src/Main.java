@@ -10,7 +10,9 @@ public class Main {
     private static float g;
     public static void main(String[] args) {
         List<Animal> animals = readAnimals();
-        if (animals != null) {runSimulation(d, g, animals);}
+        removeDeadAnimals(animals);
+        runSimulation(d, g, animals);
+        animals.forEach(Animal::makeSound);
     }
 
     private static List<Animal> readAnimals() {
@@ -20,6 +22,7 @@ public class Main {
             d = scanner.nextInt();
             g = str_to_float(scanner.next());
             int n = scanner.nextInt();
+            if (n < 1 || n > 20) {throw new InvalidInputException();}
             if (g < 0 || g > 100) {throw new GrassOutOfBoundsException();}
             if (d < 1 || d > 30) {throw new InvalidInputException();}
             scanner.nextLine();
@@ -43,22 +46,25 @@ public class Main {
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
-                    return null;
+                    System.exit(0);
                 }
             }
-            if (scanner.hasNextLine()) {throw new InvalidInputException();}
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
+            System.exit(0);
         }
         return animals;
     }
 
-    private static Float str_to_float(String str) {
+    private static Float str_to_float(String str) throws InvalidInputException {
+        String pattern = "^-?\\d+(\\.\\d+)?$";
         if (str.endsWith("F") || str.endsWith("f")) {
             str = str.substring(0, str.length() - 1);
         }
-        return Float.parseFloat(str);
+        if (str.matches(pattern)) {
+            return Float.parseFloat(str);
+        }
+        throw new InvalidInputException();
     }
 
     private static void printAnimals(List<Animal> animals) {
@@ -74,20 +80,17 @@ public class Main {
     private static void runSimulation(int days, float grassAmount, List<Animal> animals) {
         try {
             Field field = new Field(grassAmount);
-            removeDeadAnimals(animals);
             for (int i = 0; i < days; i++) {
                 for (Animal animal : animals) {
                     if (animal.getEnergy() != 0) {
                         animal.eat(animals, field);
-                        animal.decrementEnergy();
                     }
                 }
-                removeDeadAnimals(animals);
                 field.makeGrassGrow();
-
-            }
-            for (Animal animal : animals) {
-                animal.makeSound();
+                for (Animal animal : animals) {
+                    animal.decrementEnergy();
+                }
+                removeDeadAnimals(animals);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
