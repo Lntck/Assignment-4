@@ -1,11 +1,12 @@
 package src;
 
 public interface Herbivore {
+    float CONDITION = 0.1f;
     default void grazeInTheField(Animal grazer, Field field) {
-        if (0.1*grazer.getWeight() < field.getGrassAmount()) {
-            float grassEaten = 0.1f*grazer.getWeight();
+        if (CONDITION * grazer.getWeight() < field.getGrassAmount()) {
+            float grassEaten = CONDITION * grazer.getWeight();
             grazer.setEnergy(grassEaten + grazer.getEnergy());
-            field.setGrassAmount(field.getGrassAmount()-grassEaten);
+            field.setGrassAmount(field.getGrassAmount() - grassEaten);
         }
     }
 }

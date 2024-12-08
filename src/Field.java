@@ -1,12 +1,12 @@
 package src;
 
-public class Field{
+public final class Field {
     public static final float MIN_GRASS = 0;
     public static final float MAX_GRASS = 100;
     private float grassAmount;
 
-    public Field(float grassAmount) throws GrassOutOfBoundsException{
-        if (grassAmount < MIN_GRASS || grassAmount > MAX_GRASS){
+    public Field(float grassAmount) throws GrassOutOfBoundsException {
+        if (grassAmount < MIN_GRASS || grassAmount > MAX_GRASS) {
             throw new GrassOutOfBoundsException();
         }
         this.grassAmount = grassAmount;
@@ -18,7 +18,6 @@ public class Field{
             this.grassAmount = MAX_GRASS;
         }
     }
-
     public float getGrassAmount() {
         return grassAmount;
     }

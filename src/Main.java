@@ -20,11 +20,15 @@ public class Main {
         String filePath = "input.txt";
         try (Scanner scanner = new Scanner(new File(filePath))) {
             String d = scanner.nextLine();
-            grassAmount = str_to_float(scanner.next());
-            if (grassAmount < 0 || grassAmount > 100) {throw new GrassOutOfBoundsException();}
-            days = str_to_int(d);
-            int n = str_to_int(scanner.next());
-            if ((days < 1 || days > 30) || (n < 1 || n > 20)) {throw new InvalidInputException();}
+            grassAmount = strToFloat(scanner.next());
+            if (grassAmount < 0 || grassAmount > 100) {
+                throw new GrassOutOfBoundsException();
+            }
+            days = strToInt(d);
+            int n = strToInt(scanner.next());
+            if ((days < 1 || days > 30) || (n < 1 || n > 20)) {
+                throw new InvalidInputException();
+            }
 
             scanner.nextLine();
             List<String> lines = new ArrayList<>();
@@ -37,13 +41,15 @@ public class Main {
 
             for (int i = 0; i < n; i++) {
                 String line = lines.get(i);
-                if (line.split(" ").length != 4) { throw new InvalidNumberOfAnimalParametersException();}
+                if (line.split(" ").length != 4) {
+                    throw new InvalidNumberOfAnimalParametersException();
+                }
                 try (Scanner sc = new Scanner(line)) {
                     String animal = sc.next();
                     if (animal.equals("Lion") || animal.equals("Boar") || animal.equals("Zebra")) {
-                        float weight = str_to_float(sc.next());
-                        float speed = str_to_float(sc.next());
-                        float energy = str_to_float(sc.next());
+                        float weight = strToFloat(sc.next());
+                        float speed = strToFloat(sc.next());
+                        float energy = strToFloat(sc.next());
                         switch (animal) {
                             case "Lion" -> animals.add(new Lion(weight, speed, energy, AnimalSound.LION));
                             case "Boar" -> animals.add(new Boar(weight, speed, energy, AnimalSound.BOAR));
@@ -65,7 +71,7 @@ public class Main {
         return animals;
     }
 
-    private static Float str_to_float(String str) throws InvalidInputException {
+    private static Float strToFloat(String str) throws InvalidInputException {
         String pattern = "^-?\\d+(\\.\\d+)?$";
         if (str.endsWith("F") || str.endsWith("f")) {
             str = str.substring(0, str.length() - 1);
@@ -76,7 +82,7 @@ public class Main {
         throw new InvalidInputException();
     }
 
-    private static Integer str_to_int(String str) throws InvalidInputException {
+    private static Integer strToInt(String str) throws InvalidInputException {
         String pattern = "\\d+$";
         if (str.matches(pattern)) {
             return Integer.parseInt(str);

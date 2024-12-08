@@ -2,8 +2,9 @@ package src;
 
 import java.util.List;
 
-public class Lion extends Animal implements Carnivore {
-    public Lion(float weight, float speed, float energy, AnimalSound sound) throws WeightOutOfBoundsException, SpeedOutOfBoundsException, EnergyOutOfBoundsException {
+public final class Lion extends Animal implements Carnivore {
+    public Lion(float weight, float speed, float energy, AnimalSound sound) throws WeightOutOfBoundsException,
+            SpeedOutOfBoundsException, EnergyOutOfBoundsException {
         super(weight, speed, energy, sound);
     }
 

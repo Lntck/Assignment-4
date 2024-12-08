@@ -14,9 +14,4 @@ public enum AnimalSound {
     public String getSound() {
         return sound;
     }
-
-    @Override
-    public String toString() {
-        return sound;
-    }
 }
