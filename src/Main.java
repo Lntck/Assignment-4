@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Main {
     private static int days;
     private static float grassAmount;
+    private static Field field;
     public static void main(String[] args) {
         List<Animal> animals = readAnimals();
         removeDeadAnimals(animals);
@@ -19,27 +20,15 @@ public class Main {
         List<Animal> animals = new ArrayList<>();
         String filePath = "input.txt";
         try (Scanner scanner = new Scanner(new File(filePath))) {
-            String d = scanner.nextLine();
-            grassAmount = strToFloat(scanner.next());
-            if (grassAmount < 0 || grassAmount > 100) {
-                throw new GrassOutOfBoundsException();
-            }
-            days = strToInt(d);
-            int n = strToInt(scanner.next());
-            if ((days < 1 || days > 30) || (n < 1 || n > 20)) {
-                throw new InvalidInputException();
-            }
-
-            scanner.nextLine();
             List<String> lines = new ArrayList<>();
             while (scanner.hasNextLine()) {
                 lines.add(scanner.nextLine());
             }
-            if (lines.size() != n) {
-                throw new InvalidInputException();
-            }
 
-            for (int i = 0; i < n; i++) {
+            grassAmount = strToFloat(lines.get(1));
+            field = new Field(grassAmount);
+
+            for (int i = 3; i < lines.size(); i++) {
                 String line = lines.get(i);
                 if (line.split(" ").length != 4) {
                     throw new InvalidNumberOfAnimalParametersException();
@@ -64,6 +53,16 @@ public class Main {
                     System.exit(0);
                 }
             }
+
+            days = strToInt(lines.getFirst());
+            int n = strToInt(lines.get(2));
+            if ((days < 1 || days > 30) || (n < 1 || n > 20)) {
+                throw new InvalidInputException();
+            }
+            if (animals.size() != n) {
+                throw new InvalidInputException();
+            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.exit(0);
@@ -102,7 +101,6 @@ public class Main {
 
     private static void runSimulation(int days, float grassAmount, List<Animal> animals) {
         try {
-            Field field = new Field(grassAmount);
             for (int i = 0; i < days; i++) {
                 for (Animal animal : animals) {
                     if (animal.getEnergy() != 0) {
