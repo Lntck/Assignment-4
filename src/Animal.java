@@ -2,6 +2,11 @@ package src;
 
 import java.util.List;
 
+/**
+ * Represents an abstract base class for animals with common properties and behaviors.
+ * This class defines the core attributes such as weight, speed, energy, and sound,
+ * as well as validation constraints for these attributes.
+ */
 public abstract class Animal {
     public static final float MIN_SPEED = 5;
     public static final float MAX_SPEED = 60;
@@ -15,6 +20,17 @@ public abstract class Animal {
     private float energy;
     private AnimalSound sound;
 
+    /**
+     * Constructs an animal with specified attributes, ensuring the values are within the defined bounds.
+     *
+     * @param weight The weight of the animal. Must be within {@link #MIN_WEIGHT} and {@link #MAX_WEIGHT}.
+     * @param speed The speed of the animal. Must be within {@link #MIN_SPEED} and {@link #MAX_SPEED}.
+     * @param energy The energy level of the animal. Must be within {@link #MIN_ENERGY} and {@link #MAX_ENERGY}.
+     * @param sound The sound associated with the animal.
+     * @throws WeightOutOfBoundsException if the weight is outside the allowable range.
+     * @throws SpeedOutOfBoundsException if the speed is outside the allowable range.
+     * @throws EnergyOutOfBoundsException if the energy is outside the allowable range.
+     */
     protected Animal(float weight, float speed, float energy, AnimalSound sound) throws WeightOutOfBoundsException,
             SpeedOutOfBoundsException, EnergyOutOfBoundsException {
         if (weight < MIN_WEIGHT || weight > MAX_WEIGHT) {
@@ -42,6 +58,12 @@ public abstract class Animal {
             this.energy = MIN_ENERGY;
         }
     }
+    /**
+     * Abstract method to define how the animal eats. This must be implemented by subclasses.
+     *
+     * @param animals A list of all animals on the field.
+     * @param field The field where the animal resides.
+     */
     public abstract void eat(List<Animal> animals, Field field);
     public final float getWeight() {
         return weight;
