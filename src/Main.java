@@ -83,10 +83,11 @@ public class Main {
             if ((days < MIN_DAYS || days > MAX_DAYS) || (n < MIN_N || n > MAX_N)) {
                 throw new InvalidInputException();
             }
-            if (animals.size() != n) {
+            if (animals.size() < n) {
                 throw new InvalidInputException();
+            } else {
+                animals = animals.subList(0, n);
             }
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.exit(0);
